@@ -14,7 +14,7 @@ var UIController = (function () {
     inputType: '.add__type',
     description: '.add__description',
     value: '.add__value',
-    button: '.add__btn'
+    inputBtn: '.add__btn'
   }
 
   return {
@@ -39,6 +39,8 @@ var UIController = (function () {
 
 //GLOABAL APP CONTROLLER
 var controller = (function (budgetCtrl, UICtrl) {
+  //From video
+  var DOM = UICtrl.getDOMstrings();
 
   var ctrlAddItem  = function () {
     // 1. Get the field input data
@@ -55,7 +57,7 @@ var controller = (function (budgetCtrl, UICtrl) {
 
   }
 
-  document.querySelector(UIController.getDOMstrings.button).addEventListener('click', ctrlAddItem)
+  document.querySelector(DOM.inputBtn).addEventListener('click', ctrlAddItem)
 
   document.addEventListener('keypress', function (event) {
 
