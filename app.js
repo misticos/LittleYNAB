@@ -14,6 +14,14 @@ var budgetController = (function(){
     this.value = value;
   };
 
+  var calculateTotal = function(type) {
+    var sum = 0;
+    data.allItems[type].forEach(function(cur) {
+      sum = sum + cur.value;
+    });
+    data.totals[type] = sum;
+  };
+
 
   var data = {
 
@@ -24,7 +32,9 @@ var budgetController = (function(){
     totals: {
       exp: 0,
       inc: 0
-    }
+    },
+    budget: 0,
+    percentage: -1
   }
 
   return {
@@ -51,6 +61,29 @@ var budgetController = (function(){
 
       //Return new item
       return newItem;
+    },
+
+    calculateBudget: function () { // this is method
+
+      //cal total income and expensee
+      calculateTotal('exp');
+      calculateTotal('inc');
+
+      //cal the budget: income - expenses
+      data.budget = data.totals.inc - data.totals.exp;
+
+      //cal the percentage of income and spen
+      data.percentage = Math.round ((data.totals.exp / data.totals.inc) * 100);
+
+    },
+
+    getBudget: function() {
+      return {
+        budget: data.budget,
+        totalInc: data.totals.inc,
+        totalExp: data.totals.exp,
+        percentage: data.totals.percentage
+      }
     },
 
     testing: function() {
@@ -137,13 +170,7 @@ var UIController = (function () {
   };
 
 })();
-var updateBudget = function() {
-    // 1. Calculate budget 
 
-    // 2. Calculate the budget__title
-
-    // 3. Display the budget on UI
-};
 
 //GLOABAL APP CONTROLLER
 var controller = (function (budgetCtrl, UICtrl) {
@@ -179,5 +206,17 @@ var controller = (function (budgetCtrl, UICtrl) {
       ctrlAddItem();
     }
   })
+
+  var updateBudget = function() {
+    // 1. Calculate budget 
+    budgetCtrl.calculateBudget();
+
+
+    // 2. Calculate the budget__title
+    var budget = budgetCtrl.getBudget();
+
+    // 3. Display the budget on UI
+    console.log(budget);
+};
 
 })(budgetController, UIController);
